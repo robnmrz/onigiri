@@ -16,14 +16,16 @@ func main() {
 		FileName: "test.txt",
 		Message:  "Hello world",
 	}
-	memory := memory.NewAgentMemory(memory.WithMaxMessages(5))
+	memory := memory.NewAgentMemory(memory.WithMaxMessages(2))
 	memory.InitializeTurn()
+	memory.AddMessage("user", messageTest)
+	memory.AddMessage("user", messageTest)
+	memory.AddMessage("user", messageTest)
 	memory.AddMessage("user", messageTest)
 
 	jsonString, err := memory.ToJson()
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	fmt.Println(jsonString)
 }

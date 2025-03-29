@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"slices"
+
 	"github.com/google/uuid"
 	"github.com/robnmrz/onigiri/utils"
 )
@@ -80,8 +82,8 @@ func (am *AgentMemory) AddMessage(role string, content any) {
 // there are more than MaxMessages
 func (am *AgentMemory) manageOverflow() {
 	if am.MaxMessages != -1 {
-		for i := 0; i < len(am.History)-am.MaxMessages; i++ {
-			am.History = am.History[i:]
+		for i := range len(am.History) - am.MaxMessages {
+			am.History = am.History[i+1:]
 		}
 	}
 }
@@ -118,7 +120,7 @@ func (am *AgentMemory) DeleteMessagesByTurnId(turnId string) error {
 	initialLength := len(am.History)
 	for i, msg := range am.History {
 		if msg.TurnId == turnId {
-			am.History = append(am.History[:i], am.History[i+1:]...)
+			am.History = slices.Delete(am.History, i, i+1)
 		}
 	}
 	if len(am.History) == initialLength {
