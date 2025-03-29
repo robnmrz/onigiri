@@ -1,9 +1,11 @@
 package main
 
+import "github.com/robnmrz/onigiri/memory"
+
 type BaseAgentConfig struct {
 	// Client                *LLMClient
-	Model string
-	// Memory                *Memory
+	Model  string
+	Memory *memory.AgentMemory
 	// SystemPromptGenerator *SystemPromptGenerator
 	SystemRole     string
 	InputSchema    any
@@ -14,5 +16,16 @@ type BaseAgentConfig struct {
 }
 
 type BaseAgent struct {
-	Config *BaseAgentConfig
+	Config        *BaseAgentConfig
+	InitialMemory *memory.AgentMemory
+	Memory        *memory.AgentMemory
 }
+
+func NewBaseAgent(config *BaseAgentConfig) *BaseAgent {
+	return &BaseAgent{
+		Config: config,
+		Memory: config.Memory.Copy(),
+	}
+}
+
+// function to
