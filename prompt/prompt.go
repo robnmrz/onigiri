@@ -20,6 +20,7 @@ type SystemPromptContextProviderBase interface {
 	GetTitle() string
 }
 
+// SystemPromptGenerator struct
 type SystemPromptGenerator struct {
 	Background         []string
 	Steps              []string
@@ -27,6 +28,8 @@ type SystemPromptGenerator struct {
 	ContextProviders   map[string]SystemPromptContextProviderBase
 }
 
+// Constructor for SystemPromptGenerator
+// takes in optional function to add background, steps, output instructions and context providers
 func NewSystemPromptGenerator(ops ...SytemPromptGeneratorOption) *SystemPromptGenerator {
 	spg := &SystemPromptGenerator{
 		Background:         []string{},
@@ -40,30 +43,36 @@ func NewSystemPromptGenerator(ops ...SytemPromptGeneratorOption) *SystemPromptGe
 	return spg
 }
 
+// Funtions to add a optional background to the system prompt
 func WithBackground(background []string) SytemPromptGeneratorOption {
 	return func(spg *SystemPromptGenerator) {
 		spg.Background = background
 	}
 }
 
+// Funtions to add optional steps to the system prompt
 func WithSteps(steps []string) SytemPromptGeneratorOption {
 	return func(spg *SystemPromptGenerator) {
 		spg.Steps = steps
 	}
 }
 
+// Funtions to add optional output instructions to the system prompt
 func WithOutputInstructions(outputInstructions []string) SytemPromptGeneratorOption {
 	return func(spg *SystemPromptGenerator) {
 		spg.OutputInstructions = outputInstructions
 	}
 }
 
+// Funtions to add optional context providers (runtime input) to the system prompt
 func WithContextProviders(contextProviders map[string]SystemPromptContextProviderBase) SytemPromptGeneratorOption {
 	return func(spg *SystemPromptGenerator) {
 		spg.ContextProviders = contextProviders
 	}
 }
 
+// GeneratePrompt function to generate the agents system prompt
+// based on the available background, steps and output instructions
 func (spg *SystemPromptGenerator) GeneratePrompt() string {
 	sections := []PromptSection{
 		{
